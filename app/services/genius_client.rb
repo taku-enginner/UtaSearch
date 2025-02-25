@@ -1,6 +1,7 @@
 require "httparty"
 require "nokogiri"
 require "json"
+require "net/http"
 
 class GeniusClient
   include HTTParty
@@ -29,8 +30,13 @@ class GeniusClient
   end
 
   def get_lyrics(url)
-    tmp = HTTParty.get(url)
-    parsed_html = Nokogiri::HTML(tmp)
+    url = URI(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Get.new(uri.request_uri)
+    response = http.request(request)
+    parsed_html = Nokogiri::HTML(response)
     
     # 特定のdivタグの中身を抽出
     lyrics_div = parsed_html.css('div[data-lyrics-container="true"]')

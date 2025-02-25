@@ -28,7 +28,6 @@ class GeniusClient
 
   def get_lyrics(url)
     response = HTTParty.get(url)
-    p response
     if response.success?
       # matches = response.body.scan(/<div data-lyrics-container="true" class="Lyrics-sc-3051f9b7-1 kLpNCS">(.*?)<\/div>/m)
       response

@@ -8,6 +8,15 @@
 ARG RUBY_VERSION=3.3.6
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
+ARG RAILS_ENV
+ARG RAILS_MASTER_KEY
+
+ENV RAILS_ENV=$RAIS_ENV
+ENV RAILS_MASTER_KEY=$RAILS_MASTER_KEY
+ENV LANG C.UTF-8
+ENV TZ Asia/Tokyo
+RUN env
+
 # Rails app lives here
 WORKDIR /rails
 

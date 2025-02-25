@@ -54,8 +54,8 @@ class SearchSongsController < ApplicationController
     # else
     #   flash[:alert] = "履歴の保存に失敗しました"
     # end
+    p "lyrics: #{@lyrics}"
 
-    render plain: @lyrics
   end
 
   def how_to_use

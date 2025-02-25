@@ -30,9 +30,14 @@ class SearchSongsController < ApplicationController
     genius_client = GeniusClient.new
     api_path = params[:hit][:result][:api_path]
 
-    @lyrics = genius_client.get_lyrics("https://genius.com#{api_path}")
-    Rails.logger.debug "getLyrics: #{@lyrics}"
-
+    begin
+      @lyrics = genius_client.get_lyrics("https://genius.com#{api_path}")   
+      Rails.logger.debug "getLyrics: #{@lyrics}"
+    rescue StandardError => e
+      Rails.logger.error "API call failed: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      @lyrics = "Error retrieving lyrics."
+    end
     # # URLの検証
     # unless valid_url?(api_path)
     #   flash[:alert] = "無効なURLです"

@@ -327,6 +327,7 @@ DEPENDENCIES
   httparty
   jbuilder
   jsbundling-rails
+  nokogiri
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.2.2, >= 7.2.2.1)

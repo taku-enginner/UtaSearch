@@ -3,9 +3,9 @@ Rails.application.routes.draw do
     collection do
       get :search_results
       get :how_to_use
+      get :lyrics
     end
     member do
-      get :lyrics
     end
   end
   root "search_songs#index"

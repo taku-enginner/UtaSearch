@@ -9,10 +9,12 @@ class SearchSongsController < ApplicationController
 
   # GET /search_songs/search_results
   def search_results
+    Rails.logger.debug "search_resultsアクションに入りました"
     @search_song = SearchSong.new(search_song_params)
     if @search_song.title.present? || @search_song.artist_name.present?
       genius_client = GeniusClient.new
       @hits = genius_client.search_song(@search_song.title, @search_song.artist_name)
+      Rails.logger.debug "Hits: #{@hits}"
     else
       @hits = []
     end
@@ -23,31 +25,37 @@ class SearchSongsController < ApplicationController
   end
 
   def lyrics
+    Rails.logger.debug "Lyricsアクションに入りました"
+    Rails.logger.debug "lyrics_action_Params: #{params}"
     genius_client = GeniusClient.new
-    lyrics_url = params[:url]
+    api_path = params[:hit][:result][:api_path]
 
-    # URLの検証
-    unless valid_url?(lyrics_url)
-      flash[:alert] = "無効なURLです"
-      redirect_to search_songs_path and return
-    end
+    @lyrics = genius_client.get_lyrics("https://genius.com#{api_path}")
+    Rails.logger.debug "getLyrics: #{@lyrics}"
 
-    @lyrics = genius_client.get_lyrics(lyrics_url)
+    # # URLの検証
+    # unless valid_url?(api_path)
+    #   flash[:alert] = "無効なURLです"
+    #   redirect_to search_songs_path and return
+    # end
+    # Rails.logger.debug "lyrics_path: #{api_path}"
 
-    # デバッグ用のログ
-    Rails.logger.debug "Title: #{params[:title]}"
-    Rails.logger.debug "Artist Name: #{params[:artist_name]}"
-    Rails.logger.debug "URL: #{params[:url]}"
+    
 
-    # 曲名とアーティスト名を保存
-    @search_song = SearchSong.new(title: params[:title], artist_name: params[:artist_name], url: params[:url])
-    if @search_song.save
-      flash[:notice] = "履歴が保存されました"
-    else
-      flash[:alert] = "履歴の保存に失敗しました"
-    end
+    # # デバッグ用のログ
+    # Rails.logger.debug "Title: #{params[:title]}"
+    # Rails.logger.debug "Artist Name: #{params[:artist_name]}"
+    # Rails.logger.debug "URL: #{params[:url]}"
 
-    render :lyrics
+    # # 曲名とアーティスト名を保存
+    # @search_song = SearchSong.new(title: params[:title], artist_name: params[:artist_name], url: params[:url])
+    # if @search_song.save
+    #   flash[:notice] = "履歴が保存されました"
+    # else
+    #   flash[:alert] = "履歴の保存に失敗しました"
+    # end
+
+    render plain: @lyrics
   end
 
   def how_to_use

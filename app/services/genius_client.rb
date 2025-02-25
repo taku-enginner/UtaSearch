@@ -6,7 +6,7 @@ class GeniusClient
   base_uri "https://api.genius.com"
 
   def initialize(access_token = {})
-    access_token = "UtKXLddMMnuDD-UaFbI2pwMEKchXbphv9Qlv-DqiWg6k6tTfeDOkw7T9u0v1yChE"
+    access_token = "435U6KeAMRbSwFP3reGiQsDyNAv7wui4zKqWBnZ_Trmp-0DR4XC5CbVB7hTh0Ulr"
     @headers = {
       "Authorization" => "Bearer #{access_token}"
     }

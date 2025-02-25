@@ -35,7 +35,18 @@ class GeniusClient
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     request = Net::HTTP::Get.new(uri.request_uri)
     request["Authorization"] = @headers["Authorization"]  # アクセストークンを設定
+
+    # デバッグ情報を追加
+    Rails.logger.debug "Request URI: #{uri}"
+    Rails.logger.debug "Request Headers: #{request.to_hash}"
+
     response = http.request(request)
+
+    # レスポンスのデバッグ情報を追加
+    Rails.logger.debug "Response Code: #{response.code}"
+    Rails.logger.debug "Response Message: #{response.message}"
+    Rails.logger.debug "Response Headers: #{response.to_hash}"
+    Rails.logger.debug "Response Body: #{response.body}"
 
     if response.is_a?(Net::HTTPSuccess)
       parsed_html = Nokogiri::HTML(response.body)
